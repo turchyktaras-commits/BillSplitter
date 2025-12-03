@@ -17,7 +17,7 @@ class BillSession {
         const total = this.amount + tipAmount;
         return {
             total: total.toFixed(2),
-            perPerson: (total / this.people).toFixed(2)
+			perPerson: (total / this.people).toFixed(2)
         };
     }
 }
