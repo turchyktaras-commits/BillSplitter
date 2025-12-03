@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BillSplitter - Калькулятор чайових</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>BillSplitter 🧾</h1>
+            <p>Ділимо рахунок легко!</p>
+        </header>
+        
+        <main>
+            <div class="input-group">
+                <label for="totalAmount">Сума чека (грн)</label>
+                <input type="number" id="totalAmount" placeholder="0.00" min="0" step="0.01">
+            </div>
+
+            <div class="input-group">
+                <label>Чайові (%)</label>
+                <div class="tip-options">
+                    <button class="tip-btn active" data-value="0">0%</button>
+                    <button class="tip-btn" data-value="10">10%</button>
+                    <button class="tip-btn" data-value="15">15%</button>
+                    <button class="tip-btn" data-value="20">20%</button>
+                </div>
+                <input type="hidden" id="selectedTip" value="0">
+            </div>
+
+            <div class="input-group">
+                <label for="peopleCount">Кількість осіб</label>
+                <div class="people-controls">
+                    <button onclick="app.adjustPeople(-1)">-</button>
+                    <input type="number" id="peopleCount" value="1" min="1" readonly>
+                    <button onclick="app.adjustPeople(1)">+</button>
+                </div>
+            </div>
+
+            <button id="calculateBtn" onclick="app.calculate()">Розрахувати</button>
+
+            <div id="resultArea" class="result-box hidden">
+                <div class="result-row">
+                    <span>З кожного:</span>
+                    <strong id="amountPerPerson">0.00 ₴</strong>
+                </div>
+                <div class="result-row sm">
+                    <span>Загалом з чайовими:</span>
+                    <span id="totalWithTip">0.00 ₴</span>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
