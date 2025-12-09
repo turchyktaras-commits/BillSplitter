@@ -1,0 +1,51 @@
+name: BillSplitter CI/CD
+
+# Запуск workflow при кожному пуші в гілку main
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Дозвіл на створення релізів
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Клонування репозиторію
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Вивід інформації про автора 
+      - name: Print Author Info
+        run: |
+          echo "Build started by User"
+          echo "Author: Turchyk Taras (Group KV-34)"
+          echo "Project: BillSplitter"
+
+      # 3. Імітація збирання (Build) - створення архіву з файлами сайту
+      - name: Build Project (Archive)
+        run: |
+          mkdir build
+          cp index.html style.css script.js build/
+          cd build
+          zip -r ../billsplitter-app.zip .
+          echo "Build finished. Archive created."
+
+      # 4. Створення тегу для релізу (на основі номера запуску)
+      - name: Generate Tag
+        id: tag
+        run: echo "release_tag=v1.0.${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      # 5. Публікація релізу в GitHub
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          name: Release ${{ steps.tag.outputs.release_tag }}
+          body: "Автоматичний реліз версії ${{ steps.tag.outputs.release_tag }} з GitHub Actions."
+          files: billsplitter-app.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
